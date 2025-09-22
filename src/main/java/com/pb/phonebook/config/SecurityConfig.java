@@ -4,14 +4,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.savedrequest.SavedRequest;
-
-import com.pb.phonebook.repository.AppUserRepository;
-import com.pb.phonebook.service.AppUserService;
 
 
 @Configuration
@@ -52,11 +48,6 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable());
 
         return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService(AppUserRepository userRepository) {
-        return new AppUserService(userRepository);
     }
 
     @Bean
