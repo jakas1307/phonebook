@@ -16,9 +16,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
            "LEFT JOIN u.location l " +
            "WHERE LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
            "   OR LOWER(u.email) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-           "   OR CAST(u.extension AS string) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
            "   OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "   OR CAST(u.extension AS string) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
            "   OR LOWER(d.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-           "   OR LOWER(l.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+           "   OR LOWER(l.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+           "   OR LOWER(l.region) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<User> searchUsers(@Param("keyword") String keyword);
 }

@@ -68,6 +68,7 @@ public class UserController {
         }
 
         model.addAttribute("users", users);
+        model.addAttribute("keyword", keyword);
         return "user/lists";
     }
 
