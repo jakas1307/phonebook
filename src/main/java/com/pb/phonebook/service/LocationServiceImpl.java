@@ -1,0 +1,77 @@
+package com.pb.phonebook.service;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.pb.phonebook.dto.LocationDto;
+import com.pb.phonebook.entity.Location;
+import com.pb.phonebook.repository.LocationRepository;
+
+import lombok.RequiredArgsConstructor;
+
+
+@Service
+@RequiredArgsConstructor
+public class LocationServiceImpl implements LocationService{
+    
+    private final LocationRepository locationRepository;
+
+    private LocationDto mapToDto(Location location) {
+        return LocationDto.builder()
+                .id(location.getId())
+                .name(location.getName())
+                .region(location.getRegion())
+                .subregion(location.getSubregion())
+                .site(location.getSite())
+                .build();
+    }
+
+    private Location mapToEntity(LocationDto dto) {
+        return Location.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .region(dto.getRegion())
+                .subregion(dto.getSubregion())
+                .site(dto.getSite())
+                .build();
+    }
+
+    @Override
+    public LocationDto createLocation(LocationDto locationDto) {
+        return mapToDto(locationRepository.save(mapToEntity(locationDto)));
+    }
+
+    @Override
+    public LocationDto getLocationById(Long id) {
+        return locationRepository.findById(id)
+                .map(this::mapToDto)
+                .orElse(null);
+    }
+
+    @Override
+    public List<LocationDto> getAllLocations() {
+        return locationRepository.findAll()
+                .stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Override
+    public LocationDto updateLocation(Long id, LocationDto locationDto) {
+        return locationRepository.findById(id)
+                .map(existing -> {
+                    existing.setName(locationDto.getName());
+                    existing.setRegion(locationDto.getRegion());
+                    existing.setSubregion(locationDto.getSubregion());
+                    existing.setSite(locationDto.getSite());
+                    return mapToDto(locationRepository.save(existing));
+                })
+                .orElse(null);
+    }
+
+    @Override
+    public void deleteLocation(Long id) {
+        locationRepository.deleteById(id);
+    }
+}
