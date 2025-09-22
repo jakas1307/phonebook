@@ -57,19 +57,21 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String listUsers(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+    public String listUsers(@RequestParam(required = false) String keyword, Model model) {
+        System.out.println("DEBUG KEYWORD: " + keyword);
+        
         List<UserDto> users;
 
-        if (keyword != null && !keyword.isEmpty()) {
-            users = userService.searchUsers(keyword);
+        if (keyword == null || keyword.isEmpty()) {
+            users = userService.getAllUsers();
             model.addAttribute("keyword", keyword);
         } else {
-            users = userService.getAllUsers();
+            users = userService.searchUsers(keyword);
         }
 
         model.addAttribute("users", users);
         model.addAttribute("keyword", keyword);
-        return "user/lists";
+        return "users/list";
     }
 
     @GetMapping("/edit/{id}")
