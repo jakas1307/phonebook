@@ -27,6 +27,6 @@ public class RegisterController {
     @PostMapping("/register")
     public String processRegister(@ModelAttribute("user") AppUser user) {
         registerService.registerUser(user.getUsername(), user.getPassword(), user.getRole());
-        return "redirect:/login?registered";
+        return "redirect:/login";
     }
 }
