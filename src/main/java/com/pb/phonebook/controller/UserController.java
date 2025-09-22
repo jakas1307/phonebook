@@ -20,22 +20,30 @@ import com.pb.phonebook.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
-
-
 @Controller
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    
+
     private final UserService userService;
     private final CompanyService companyService;
     private final DepartmentService departmentService;
     private final LocationService locationService;
 
     @GetMapping
-    public String listUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "users/list";
+    public String listUsers(@RequestParam(required = false) String keyword, Model model) {
+        System.out.println("DEBUG KEYWORD: " + keyword);
+
+        List<UserDto> users;
+        if (keyword == null || keyword.isEmpty()) {
+            users = userService.getAllUsers();
+        } else {
+            users = userService.searchUsers(keyword);
+        }
+
+        model.addAttribute("users", users);
+        model.addAttribute("keyword", keyword);
+        return "users/list"; // pastikan folder thymeleaf 'users/list.html'
     }
 
     @GetMapping("/new")
@@ -48,30 +56,11 @@ public class UserController {
     }
 
     @PostMapping
-    public String create(@ModelAttribute("user")
-                         UserDto dto,
-                         RedirectAttributes redirectAttributes) {
+    public String create(@ModelAttribute("user") UserDto dto,
+            RedirectAttributes redirectAttributes) {
         userService.createUser(dto);
         redirectAttributes.addFlashAttribute("successMessage", "Data user berhasil ditambahkan!");
         return "redirect:/users";
-    }
-
-    @GetMapping("/users")
-    public String listUsers(@RequestParam(required = false) String keyword, Model model) {
-        System.out.println("DEBUG KEYWORD: " + keyword);
-        
-        List<UserDto> users;
-
-        if (keyword == null || keyword.isEmpty()) {
-            users = userService.getAllUsers();
-            model.addAttribute("keyword", keyword);
-        } else {
-            users = userService.searchUsers(keyword);
-        }
-
-        model.addAttribute("users", users);
-        model.addAttribute("keyword", keyword);
-        return "users/list";
     }
 
     @GetMapping("/edit/{id}")
@@ -85,9 +74,8 @@ public class UserController {
     }
 
     @PostMapping("/edit/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute("user")
-                         UserDto dto,
-                         RedirectAttributes redirectAttributes) {
+    public String update(@PathVariable Long id, @ModelAttribute("user") UserDto dto,
+            RedirectAttributes redirectAttributes) {
         userService.updateUser(id, dto);
         redirectAttributes.addFlashAttribute("successMessage", "Data User berhasil diperbaharui!");
         return "redirect:/users";
