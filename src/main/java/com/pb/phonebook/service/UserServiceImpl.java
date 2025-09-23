@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
                 .departmentName(user.getDepartment() != null ? user.getDepartment().getName() : null)
                 .locationId(user.getLocation() != null ? user.getLocation().getId() : null)
                 .locationName(user.getLocation() != null ? user.getLocation().getName() : null)
-                .locationRegion(user.getLocation() != null? user.getLocation().getRegion() : null)
+                .locationSubRegion(user.getLocation() != null? user.getLocation().getSubregion() : null)
                 .build();
     }
 

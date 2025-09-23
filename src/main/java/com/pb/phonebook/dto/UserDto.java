@@ -27,5 +27,5 @@ public class UserDto {
 
     private Long locationId;
     private String locationName;
-    private String locationRegion;
+    private String locationSubRegion;
 }

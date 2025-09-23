@@ -91,6 +91,20 @@ public class UserController {
         model.addAttribute("companies", companyService.getAllCompanies());
         model.addAttribute("departments", departmentService.getAllDepartments());
         model.addAttribute("locations", locationService.getAllLocations());
+
+        List<String> subregions = locationService.getAllLocations()
+                                                 .stream()
+                                                 .map(LocationDto::getSubregion)
+                                                 .filter(sr -> sr != null && !sr.isEmpty())
+                                                 .distinct()
+                                                 .toList();
+        
+        System.out.println("DEBUG Locations: " + locationService.getAllLocations());
+        System.out.println("DEBUG Subregions: " + subregions);
+        
+        model.addAttribute("subregions", subregions);
+        model.addAttribute("locations", List.of());
+        
         return "users/edit";
     }
 
