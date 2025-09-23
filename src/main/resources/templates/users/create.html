@@ -53,7 +53,7 @@
                 <div class="mb-3">
                     <label class="form-label">Location</label>
                     <select id="location" name="locationId" class="form-select">
-                        <option value="">-- Pilih Location --</option>
+                        <option value="">-- Pilih Lokasi --</option>
                     </select>
                 </div>
 
@@ -62,10 +62,11 @@
                         const subregion = this.value;
                         const locationSelect = document.getElementById("location");
 
-                        locationSelect.innerHTML = '<option value ="">-- Pilih lokasi --</option>';
+                        locationSelect.innerHTML = '<option value ="">-- Pilih Lokasi --</option>';
 
                         if (subregion) {
-                            fetch('/users/location-by-subregion?subregion=${subregion}')
+                            fetch('/[[@{/locations/by-subregion}]]/ ?subregion= + encodeURIComponent(subregion)')
+
                                 .then(res => res.json())
                                 .then(data => {
                                     data.foreach(loc => {
