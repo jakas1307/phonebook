@@ -1,6 +1,7 @@
 package com.pb.phonebook.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -38,8 +39,12 @@ public class LocationServiceImpl implements LocationService{
     }
 
     @Override
-    public LocationDto createLocation(LocationDto locationDto) {
-        return mapToDto(locationRepository.save(mapToEntity(locationDto)));
+    public List<LocationDto> getAllLocations() {
+        List<Location> locations = locationRepository.findAll();
+
+        return locations.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -49,12 +54,19 @@ public class LocationServiceImpl implements LocationService{
                 .orElse(null);
     }
 
-    @Override
-    public List<LocationDto> getAllLocations() {
-        return locationRepository.findAll()
+        @Override
+    public List<LocationDto> getLocationsBySubregion(String subregion) {
+        return locationRepository.findBySubregion(subregion)
                 .stream()
                 .map(this::mapToDto)
                 .toList();
+    }
+
+    @Override
+    public LocationDto createLocation(LocationDto locationDto) {
+        Location location = mapToEntity(locationDto);
+        Location saved = locationRepository.save(location);
+        return mapToDto(saved);
     }
 
     @Override
@@ -74,4 +86,5 @@ public class LocationServiceImpl implements LocationService{
     public void deleteLocation(Long id) {
         locationRepository.deleteById(id);
     }
+
 }

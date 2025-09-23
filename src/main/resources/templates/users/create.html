@@ -38,13 +38,47 @@
                         <option th:each="d : ${departments}" th:value="${d.id}" th:text="${d.name}"></option>
                     </select>
                 </div>
+                
                 <div class="mb-3">
-                    <label class="form-label">Location</label>
-                    <select th:field="*{locationId}" class="form-select">
-                        <option value="">-- Select Location --</option>
-                        <option th:each="l : ${locations}" th:value="${l.id}" th:text="${l.name}"></option>
+                    <label class="form-label">Subregion</label>
+                    <select id="subregion" class="form-select">
+                        <option value="">-- Pilih Subregion --</option>
+                        <option th:each="sr : ${subregions}"
+                            th:value="${sr}"
+                            th:text="${sr}">
+                        </option>
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Location</label>
+                    <select id="location" name="locationId" class="form-select">
+                        <option value="">-- Pilih Location --</option>
+                    </select>
+                </div>
+
+                <script>
+                    document.getElementById("subregion").addEventListener("change", function() {
+                        const subregion = this.value;
+                        const locationSelect = document.getElementById("location");
+
+                        locationSelect.innerHTML = '<option value ="">-- Pilih lokasi --</option>';
+
+                        if (subregion) {
+                            fetch('/users/location-by-subregion?subregion=${subregion}')
+                                .then(res => res.json())
+                                .then(data => {
+                                    data.foreach(loc => {
+                                        const opt = document.createElement("option");
+                                        opt.value = loc.id;
+                                        opt.text = loc.name;
+                                        locationSelect.appendChild(opt);
+                                    });
+                                });
+                        }
+                    });
+                </script>
+
                 <div class="d-flex justify-content-end">
                     <a th:href="@{/users}" class="btn btn-secondary me-2">Cancel</a>
                     <button type="submit" class="btn btn-success">Create</button>

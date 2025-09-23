@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.pb.phonebook.dto.LocationDto;
 import com.pb.phonebook.dto.UserDto;
 import com.pb.phonebook.service.CompanyService;
 import com.pb.phonebook.service.DepartmentService;
@@ -51,8 +53,27 @@ public class UserController {
         model.addAttribute("user", new UserDto());
         model.addAttribute("companies", companyService.getAllCompanies());
         model.addAttribute("departments", departmentService.getAllDepartments());
-        model.addAttribute("locations", locationService.getAllLocations());
+
+        List<String> subregions = locationService.getAllLocations()
+                                                 .stream()
+                                                 .map(LocationDto::getSubregion)
+                                                 .filter(sr -> sr != null && !sr.isEmpty())
+                                                 .distinct()
+                                                 .toList();
+        
+        System.out.println("DEBUG Locations: " + locationService.getAllLocations());
+        System.out.println("DEBUG Subregions: " + subregions);
+        
+        model.addAttribute("subregions", subregions);
+        model.addAttribute("locations", List.of());
+
         return "users/create";
+    }
+
+    @ResponseBody
+    @GetMapping("/locations-by-subregion")
+    public List<LocationDto> getLocationBySubregion(@RequestParam String subregion) {
+        return locationService.getLocationsBySubregion(subregion);
     }
 
     @PostMapping
