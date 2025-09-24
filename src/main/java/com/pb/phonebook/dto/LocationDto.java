@@ -25,7 +25,9 @@ public class LocationDto {
         LocationDto dto = new LocationDto();
         dto.setId(location.getId());
         dto.setName(location.getName());
+        dto.setRegion(location.getRegion());
         dto.setSubregion(location.getSubregion());
+        dto.setSite(location.getSite());
         
         return dto;
     }
