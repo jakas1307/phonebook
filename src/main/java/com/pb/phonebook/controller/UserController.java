@@ -45,7 +45,7 @@ public class UserController {
 
         model.addAttribute("users", users);
         model.addAttribute("keyword", keyword);
-        return "users/list"; // pastikan folder thymeleaf 'users/list.html'
+        return "users/list";
     }
 
     @GetMapping("/new")
