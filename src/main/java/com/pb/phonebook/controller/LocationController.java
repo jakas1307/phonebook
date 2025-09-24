@@ -74,7 +74,10 @@ public class LocationController {
     @GetMapping("/locations/by-subregion")
     @ResponseBody
     public List<LocationDto> getLocationsBySubregion(@RequestParam String subregion) {
-        return locationService.getLocationsBySubregion(subregion);
+        return locationService.getAllLocations()
+                              .stream()
+                              .filter(loc -> subregion.equals(loc.getSubregion()))
+                              .toList();
     }
 
 }

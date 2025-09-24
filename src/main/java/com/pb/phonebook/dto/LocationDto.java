@@ -1,5 +1,7 @@
 package com.pb.phonebook.dto;
 
+import com.pb.phonebook.entity.Location;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,4 +20,13 @@ public class LocationDto {
     private String region;
     private String subregion;
     private String site;
+
+    public static LocationDto fromEntity(Location location) {
+        LocationDto dto = new LocationDto();
+        dto.setId(location.getId());
+        dto.setName(location.getName());
+        dto.setSubregion(location.getSubregion());
+        
+        return dto;
+    }
 }

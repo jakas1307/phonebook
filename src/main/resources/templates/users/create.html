@@ -59,8 +59,8 @@
 
                 <script>
                     document.getElementById("subregion").addEventListener("change", function() {
-                        const subregion = this.value;
-                        const locationSelect = document.getElementById("location");
+                        let subregion = this.value;
+                        let locationSelect = document.getElementById("location");
 
                         locationSelect.innerHTML = '<option value ="">-- Pilih Lokasi --</option>';
 
@@ -70,10 +70,10 @@
                                 .then(res => res.json())
                                 .then(data => {
                                     data.foreach(loc => {
-                                        const opt = document.createElement("option");
+                                        let opt = document.createElement("option");
                                         opt.value = loc.id;
                                         opt.text = loc.name;
-                                        locationSelect.appendChild(opt);
+                                        locationSelect.add(opt);
                                     });
                                 });
                         }

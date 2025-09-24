@@ -40,11 +40,10 @@ public class LocationServiceImpl implements LocationService{
 
     @Override
     public List<LocationDto> getAllLocations() {
-        List<Location> locations = locationRepository.findAll();
-
-        return locations.stream()
-                .map(this::mapToDto)
-                .collect(Collectors.toList());
+        return locationRepository.findAll()
+                                 .stream()
+                                 .map(LocationDto::fromEntity)
+                                 .collect(Collectors.toList());
     }
 
     @Override
@@ -54,12 +53,12 @@ public class LocationServiceImpl implements LocationService{
                 .orElse(null);
     }
 
-        @Override
+    @Override
     public List<LocationDto> getLocationsBySubregion(String subregion) {
         return locationRepository.findBySubregion(subregion)
-                .stream()
-                .map(this::mapToDto)
-                .toList();
+                                 .stream()
+                                 .map(LocationDto::fromEntity)
+                                 .collect(Collectors.toList());
     }
 
     @Override
