@@ -34,7 +34,7 @@ public class User {
     @Column(nullable = false)
     private Integer extension;
 
-    @Column(nullable = false, unique = true, length = 500)
+    @Column(nullable = false, length = 500)
     private String email;
 
     @ManyToOne

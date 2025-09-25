@@ -54,50 +54,33 @@
 
                 <div class="mb-3">
                     <label class="form-label">Location</label>
-                    <select id="locationId" name="locationId" th:field="*{locationId}"
-                    th:attr="data-current-id=${user.locationId}" class="form-select">
-                        <option value="">-- Select Location --</option>
+                    <select id="location" name="locationId" class="form-select">
+                        <option value="">-- Pilih Lokasi --</option>
                     </select>
                 </div>
 
                 <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const subregionSelect = document.getElementById("subregion");
-                        const locationSelect = document.getElementById("locationId");
-                        
-                        function loadLocations(subregion, selectedLocationId) {
-                            fetch(/*[[@{/users/locations-by-subregion}]]*/ + '?subregion=' + encodeURIComponent(subregion))
-                            .then(res => res.json())
-                            .then(data => {
-                                locationSelect.innerHTML = '<option value="">-- Pilih Lokasi --</option>';
-                                data.forEach(loc => {
-                                    const opt = document.createElement("option");
-                                    opt.value = loc.id;
-                                    opt.textContent = loc.name;
-                                    if (selectedLocationId && selectedLocationId == loc.id) {
-                                        opt.selected = true;
-                                    }
-                                    locationSelect.appendChild(opt);
-                                });
-                            });
+                    document.getElementById("subregion").addEventListener("change", function() {
+                        let subregion = this.value;
+                        let locationSelect = document.getElementById("location");
+
+                        locationSelect.innerHTML = '<option value ="">-- Pilih Lokasi --</option>';
+
+                        if (subregion) {
+                            fetch("[[@{/users/locations-by-subregion}]]?subregion=" + encodeURIComponent(subregion))
+                                .then(response => response.json())
+                                .then(data => {
+                                    data.forEach(loc => {
+                                        let opt = document.createElement("option");
+                                        opt.value = loc.id;
+                                        opt.text = loc.name;
+                                        locationSelect.add(opt);
+                                    });
+                                })
+                                .catch(err => console.error("Error fetching locations: ", err));
                         }
-                        
-                        const currentSubregion = subregionSelect.value;
-                        const currentLocationId = locationSelect.getAttribute("data-current-id");
-                        
-                        if (currentSubregion) {
-                            loadLocations(currentSubregion, currentLocationId);
-                        }
-                        
-                        subregionSelect.addEventListener("change", function () {
-                            if (this.value) {
-                                loadLocations(this.value, null);
-                            } else {
-                                locationSelect.innerHTML = '<option value="">-- Pilih Lokasi --</option>';
-                            }
-                        });
                     });
-                    </script>
+                </script>
 
                 <div class="d-flex justify-content-end">
                     <a th:href="@{/users}" class="btn btn-secondary me-2">Cancel</a>

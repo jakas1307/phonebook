@@ -65,7 +65,7 @@
                         locationSelect.innerHTML = '<option value ="">-- Pilih Lokasi --</option>';
 
                         if (subregion) {
-                            fetch("/[[@{/users/locations-by-subregion}]]/?subregion=" + encodeURIComponent(subregion))
+                            fetch("[[@{/users/locations-by-subregion}]]?subregion=" + encodeURIComponent(subregion))
                                 .then(response => response.json())
                                 .then(data => {
                                     data.forEach(loc => {
