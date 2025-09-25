@@ -65,17 +65,17 @@
                         locationSelect.innerHTML = '<option value ="">-- Pilih Lokasi --</option>';
 
                         if (subregion) {
-                            fetch("/[[@{/locations/by-subregion}]]/?subregion=" + encodeURIComponent(subregion))
-
+                            fetch("/[[@{/users/locations-by-subregion}]]/?subregion=" + encodeURIComponent(subregion))
                                 .then(response => response.json())
                                 .then(data => {
-                                    data.foreach(loc => {
+                                    data.forEach(loc => {
                                         let opt = document.createElement("option");
                                         opt.value = loc.id;
                                         opt.text = loc.name;
                                         locationSelect.add(opt);
                                     });
-                                });
+                                })
+                                .catch(err => console.error("Error fetching locations: ", err));
                         }
                     });
                 </script>
